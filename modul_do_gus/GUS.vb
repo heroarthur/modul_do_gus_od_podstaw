@@ -5,7 +5,7 @@ Imports System.Xml
 ' https://services.github.com/on-demand/windows/visual-studio
 
 ' remember to add Service reference "UslugaBIRpubl" from https://wyszukiwarkaregontest.stat.gov.pl/wsBIR/wsdl/UslugaBIRzewnPubl.xsd
-' BIR1 "documentation" http://bip.stat.gov.pl/dzialalnosc-statystyki-publicznej/rejestr-regon/interfejsyapi/jak-skorzystac-informacja-dla-podmiotow-komercyjnych/
+
 
 
 Module Module1
@@ -191,5 +191,3 @@ Module Module1
     End Sub  'ustaw punkt przerwania tutaj by sprawdzic ustawione dane i raporty
 
 End Module
-
-
