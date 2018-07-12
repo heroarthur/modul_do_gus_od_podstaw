@@ -8,7 +8,7 @@ Imports System.Xml
 
 
 
-Module Module1
+Module Gus_polaczenie
 
 
     Public Class Podstawowe_dane
@@ -35,11 +35,11 @@ Module Module1
         Public regon,
         nip,
         nazwa,
-        nazwaskrocona,
+        nazwaSkrocona,
         numerWRejestrzeEwidencji As String
 
         Public Sub New()
-            regon = "" : nip = "" : nazwa = "" : nazwaskrocona = "" : numerWRejestrzeEwidencji = ""
+            regon = "" : nip = "" : nazwa = "" : nazwaSkrocona = "" : numerWRejestrzeEwidencji = ""
         End Sub
     End Class
 
@@ -78,18 +78,18 @@ Module Module1
             MyBase.Finalize()
         End Sub
 
-        Private Sub Update_gus_session()
-            Static session_valid As String = "1"
-            Static session_state As String = "StatusSesji"
-            Dim session_value = cc.GetValue(session_state)
-            If session_value <> session_valid Then
+        Private Sub Uaktualnij_sesje_gus()
+            Static seja_poprawna As String = "1"
+            Static status_sesji As String = "StatusSesji"
+            Dim stan_sesji = cc.GetValue(status_sesji)
+            If stan_sesji <> seja_poprawna Then
                 strSID = cc.Zaloguj(gus_key)
             End If
         End Sub
 
 
-        Private Function Downloand_basic_data(Nip As String) As String
-            Update_gus_session()
+        Private Function Pobierz_podstawowe_dane(Nip As String) As String
+            Uaktualnij_sesje_gus()
             Using (New OperationContextScope(cc.InnerChannel))
                 requestMessage.Headers("sid") = strSID
                 OperationContext.Current.OutgoingMessageProperties(Channels.HttpRequestMessageProperty.Name) = requestMessage
@@ -101,8 +101,8 @@ Module Module1
         End Function
 
 
-        Private Function Downloand_full_raport(Regon As String) As String
-            Update_gus_session()
+        Private Function Pobierz_pelny_raport(Regon As String) As String
+            Uaktualnij_sesje_gus()
             Using (New OperationContextScope(cc.InnerChannel))
                 requestMessage.Headers("sid") = strSID
                 OperationContext.Current.OutgoingMessageProperties(Channels.HttpRequestMessageProperty.Name) = requestMessage
@@ -112,13 +112,13 @@ Module Module1
         End Function
 
 
-        Public Function Get_basic_data(Nip As String) As Podstawowe_dane
+        Public Function Daj_podstawowe_dane_dzialalnosci(Nip As String) As Podstawowe_dane
             Dim dane As Podstawowe_dane = New Podstawowe_dane
             Try
                 If String.IsNullOrEmpty(Nip) Or IsNothing(Nip) Then
                     Throw New ArgumentNullException(NameOf(Nip))
                 End If
-                Dim xmlBasicData As String = Downloand_basic_data(Nip)
+                Dim xmlBasicData As String = Pobierz_podstawowe_dane(Nip)
                 Dim doc As New XmlDocument()
                 doc.LoadXml(xmlBasicData)
 
@@ -139,20 +139,20 @@ Module Module1
         End Function
 
 
-        Public Function Get_full_raport(Regon As String) As Pelny_raport
+        Public Function Daj_pelnu_raport_dzialalnosci(Regon As String) As Pelny_raport
             Dim raport As Pelny_raport = New Pelny_raport
             Try
                 If String.IsNullOrEmpty(Regon) Or IsNothing(Regon) Then
                     Throw New ArgumentNullException(NameOf(Regon))
                 End If
-                Dim xmlBasicData As String = Downloand_full_raport(Regon)
+                Dim xmlBasicData As String = Pobierz_pelny_raport(Regon)
                 Dim doc As New XmlDocument()
                 doc.LoadXml(xmlBasicData)
 
                 raport.regon = doc.GetElementsByTagName("praw_regon14")(0).InnerXml
                 raport.nip = doc.GetElementsByTagName("praw_nip")(0).InnerXml
                 raport.nazwa = doc.GetElementsByTagName("praw_nazwa")(0).InnerXml
-                raport.nazwaskrocona = doc.GetElementsByTagName("praw_nazwaSkrocona")(0).InnerXml
+                raport.nazwaSkrocona = doc.GetElementsByTagName("praw_nazwaSkrocona")(0).InnerXml
                 raport.numerWRejestrzeEwidencji = doc.GetElementsByTagName("praw_numerWrejestrzeEwidencji")(0).InnerXml
                 Return raport
             Catch ex As Exception
@@ -171,21 +171,20 @@ Module Module1
 
         Dim gusApi As New GusApi
 
-
-        Dim dane1 As Podstawowe_dane = gusApi.Get_basic_data("6920000013")
-        Dim dane2 As Podstawowe_dane = gusApi.Get_basic_data("")
-        Dim dane3 As Podstawowe_dane = gusApi.Get_basic_data(Nothing)
+        Dim dane1 As Podstawowe_dane = gusApi.Daj_podstawowe_dane_dzialalnosci("6920000013")
+        Dim dane2 As Podstawowe_dane = gusApi.Daj_podstawowe_dane_dzialalnosci("")
+        Dim dane3 As Podstawowe_dane = gusApi.Daj_podstawowe_dane_dzialalnosci(Nothing)
         Dim unini As String
-        Dim dane4 As Podstawowe_dane = gusApi.Get_basic_data(unini)
-        Dim dane5 As Podstawowe_dane = gusApi.Get_basic_data("spitfire")
+        Dim dane4 As Podstawowe_dane = gusApi.Daj_podstawowe_dane_dzialalnosci(unini)
+        Dim dane5 As Podstawowe_dane = gusApi.Daj_podstawowe_dane_dzialalnosci("tekst")
 
 
-        Dim raport1 As Pelny_raport = gusApi.Get_full_raport("39002176400000")
-        Dim raport2 As Pelny_raport = gusApi.Get_full_raport("")
-        Dim raport3 As Pelny_raport = gusApi.Get_full_raport("spitfire")
-        Dim raport4 As Pelny_raport = gusApi.Get_full_raport(Nothing)
-        Dim raport5 As Pelny_raport = gusApi.Get_full_raport("32222222222222")
+        Dim raport1 As Pelny_raport = gusApi.Daj_pelnu_raport_dzialalnosci("39002176400000")
+        Dim raport2 As Pelny_raport = gusApi.Daj_pelnu_raport_dzialalnosci("")
+        Dim raport3 As Pelny_raport = gusApi.Daj_pelnu_raport_dzialalnosci("tekst")
+        Dim raport4 As Pelny_raport = gusApi.Daj_pelnu_raport_dzialalnosci(Nothing)
+        Dim raport5 As Pelny_raport = gusApi.Daj_pelnu_raport_dzialalnosci("32222222222222")
 
-    End Sub
+    End Sub  'ustaw punkt przerwania tutaj by sprawdzic ustawione dane i raporty
 
 End Module
