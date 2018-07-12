@@ -1,0 +1,19 @@
+
+Service Reference
+	UslugaBIRpubl to tzw. ServiceReference, który nale¿y utworzyæ samodzielnie (w Visual Studio: "Add Service Reference") 
+	wykorzystuj¹c adres wsdl Us³ugi (https://wyszukiwarkaregontest.stat.gov.pl/wsBIR/wsdl/UslugaBIRzewnPubl.xsd) 
+
+	
+
+Bezpieczenstwo klucza
+	dane rejestru REGON udostêpniane przez Us³ugê BIR1 s¹ publicznie dostêpne,
+
+	dlatego nie ma potrzeby dodatkowych zabezpieczeñ.
+
+	Jeœli ktoœ korzysta³by z Pana klucza to nie uzyska dostêpu do danych zastrze¿onych, 
+
+	a co najwy¿ej lekko zniekszta³ci³by ew. statystyki.
+	Jedyne realne "ryzyko" jest takie jak Pan wymieni³ - przekroczenie liczby zapytañ na Pana "konto".
+
+	Jednak w sytuacji przekroczenia limitów ¿aden Us³ugobiorca nie jest automatycznie od³¹czany od Us³ugi,
+	lecz ka¿dy przypadek jest analizowany indywidualnie wraz z bezpoœrednim konktaktem (o czym informuje tak¿e "Instrukcja techniczna").

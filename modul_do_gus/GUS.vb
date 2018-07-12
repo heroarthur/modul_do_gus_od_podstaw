@@ -5,10 +5,10 @@ Imports System.Xml
 ' https://services.github.com/on-demand/windows/visual-studio
 
 ' remember to add Service reference "UslugaBIRpubl" from https://wyszukiwarkaregontest.stat.gov.pl/wsBIR/wsdl/UslugaBIRzewnPubl.xsd
+' BIR1 "documentation" http://bip.stat.gov.pl/dzialalnosc-statystyki-publicznej/rejestr-regon/interfejsyapi/jak-skorzystac-informacja-dla-podmiotow-komercyjnych/
 
 
-
-Module Gus_polaczenie
+Module Module1
 
 
     Public Class Podstawowe_dane_dzialalnosci
@@ -53,6 +53,8 @@ Module Gus_polaczenie
         Private ea As EndpointAddress
         Private cc As UslugaBIRpubl.UslugaBIRzewnPublClient
         Private requestMessage As Channels.HttpRequestMessageProperty
+
+        'srodowisko i klucz testowe
         Private Const gusUrl As String = "https://wyszukiwarkaregontest.stat.gov.pl/wsBIR/UslugaBIRzewnPubl.svc"
         Private Const gus_key As String = "abcde12345abcde12345"
         Private strSID As String
@@ -139,7 +141,7 @@ Module Gus_polaczenie
         End Function
 
 
-        Public Function Daj_pelnu_raport_dzialalnosci(Regon As String) As Pelny_raport_dzialalnosci
+        Public Function Daj_pelen_raport_dzialalnosci(Regon As String) As Pelny_raport_dzialalnosci
             Dim raport As Pelny_raport_dzialalnosci = New Pelny_raport_dzialalnosci
             Try
                 If String.IsNullOrEmpty(Regon) Or IsNothing(Regon) Then
@@ -156,6 +158,7 @@ Module Gus_polaczenie
                 raport.numerWRejestrzeEwidencji = doc.GetElementsByTagName("praw_numerWrejestrzeEwidencji")(0).InnerXml
                 Return raport
             Catch ex As Exception
+                'MsgBox("Nie mozna pobrac raportu" & vbCrLf & ex.Message)
                 Return raport
             End Try
         End Function
@@ -179,12 +182,14 @@ Module Gus_polaczenie
         Dim dane5 As Podstawowe_dane_dzialalnosci = gusApi.Daj_podstawowe_dane_dzialalnosci("tekst")
 
 
-        Dim raport1 As Pelny_raport_dzialalnosci = gusApi.Daj_pelnu_raport_dzialalnosci("39002176400000")
-        Dim raport2 As Pelny_raport_dzialalnosci = gusApi.Daj_pelnu_raport_dzialalnosci("")
-        Dim raport3 As Pelny_raport_dzialalnosci = gusApi.Daj_pelnu_raport_dzialalnosci("tekst")
-        Dim raport4 As Pelny_raport_dzialalnosci = gusApi.Daj_pelnu_raport_dzialalnosci(Nothing)
-        Dim raport5 As Pelny_raport_dzialalnosci = gusApi.Daj_pelnu_raport_dzialalnosci("32222222222222")
+        Dim raport1 As Pelny_raport_dzialalnosci = gusApi.Daj_pelen_raport_dzialalnosci("39002176400000")
+        Dim raport2 As Pelny_raport_dzialalnosci = gusApi.Daj_pelen_raport_dzialalnosci("")
+        Dim raport3 As Pelny_raport_dzialalnosci = gusApi.Daj_pelen_raport_dzialalnosci("tekst")
+        Dim raport4 As Pelny_raport_dzialalnosci = gusApi.Daj_pelen_raport_dzialalnosci(Nothing)
+        Dim raport5 As Pelny_raport_dzialalnosci = gusApi.Daj_pelen_raport_dzialalnosci("32222222222222")
 
     End Sub  'ustaw punkt przerwania tutaj by sprawdzic ustawione dane i raporty
 
 End Module
+
+
