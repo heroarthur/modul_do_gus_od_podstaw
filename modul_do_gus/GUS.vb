@@ -11,7 +11,7 @@ Imports System.Xml
 Module Gus_polaczenie
 
 
-    Public Class Podstawowe_dane
+    Public Class Podstawowe_dane_dzialalnosci
         Public regon,
         nazwa,
         wojewodztwo,
@@ -31,7 +31,7 @@ Module Gus_polaczenie
 
 
 
-    Public Class Pelny_raport
+    Public Class Pelny_raport_dzialalnosci
         Public regon,
         nip,
         nazwa,
@@ -112,8 +112,8 @@ Module Gus_polaczenie
         End Function
 
 
-        Public Function Daj_podstawowe_dane_dzialalnosci(Nip As String) As Podstawowe_dane
-            Dim dane As Podstawowe_dane = New Podstawowe_dane
+        Public Function Daj_podstawowe_dane_dzialalnosci(Nip As String) As Podstawowe_dane_dzialalnosci
+            Dim dane As Podstawowe_dane_dzialalnosci = New Podstawowe_dane_dzialalnosci
             Try
                 If String.IsNullOrEmpty(Nip) Or IsNothing(Nip) Then
                     Throw New ArgumentNullException(NameOf(Nip))
@@ -139,8 +139,8 @@ Module Gus_polaczenie
         End Function
 
 
-        Public Function Daj_pelnu_raport_dzialalnosci(Regon As String) As Pelny_raport
-            Dim raport As Pelny_raport = New Pelny_raport
+        Public Function Daj_pelnu_raport_dzialalnosci(Regon As String) As Pelny_raport_dzialalnosci
+            Dim raport As Pelny_raport_dzialalnosci = New Pelny_raport_dzialalnosci
             Try
                 If String.IsNullOrEmpty(Regon) Or IsNothing(Regon) Then
                     Throw New ArgumentNullException(NameOf(Regon))
@@ -171,19 +171,19 @@ Module Gus_polaczenie
 
         Dim gusApi As New GusApi
 
-        Dim dane1 As Podstawowe_dane = gusApi.Daj_podstawowe_dane_dzialalnosci("6920000013")
-        Dim dane2 As Podstawowe_dane = gusApi.Daj_podstawowe_dane_dzialalnosci("")
-        Dim dane3 As Podstawowe_dane = gusApi.Daj_podstawowe_dane_dzialalnosci(Nothing)
+        Dim dane1 As Podstawowe_dane_dzialalnosci = gusApi.Daj_podstawowe_dane_dzialalnosci("6920000013")
+        Dim dane2 As Podstawowe_dane_dzialalnosci = gusApi.Daj_podstawowe_dane_dzialalnosci("")
+        Dim dane3 As Podstawowe_dane_dzialalnosci = gusApi.Daj_podstawowe_dane_dzialalnosci(Nothing)
         Dim unini As String
-        Dim dane4 As Podstawowe_dane = gusApi.Daj_podstawowe_dane_dzialalnosci(unini)
-        Dim dane5 As Podstawowe_dane = gusApi.Daj_podstawowe_dane_dzialalnosci("tekst")
+        Dim dane4 As Podstawowe_dane_dzialalnosci = gusApi.Daj_podstawowe_dane_dzialalnosci(unini)
+        Dim dane5 As Podstawowe_dane_dzialalnosci = gusApi.Daj_podstawowe_dane_dzialalnosci("tekst")
 
 
-        Dim raport1 As Pelny_raport = gusApi.Daj_pelnu_raport_dzialalnosci("39002176400000")
-        Dim raport2 As Pelny_raport = gusApi.Daj_pelnu_raport_dzialalnosci("")
-        Dim raport3 As Pelny_raport = gusApi.Daj_pelnu_raport_dzialalnosci("tekst")
-        Dim raport4 As Pelny_raport = gusApi.Daj_pelnu_raport_dzialalnosci(Nothing)
-        Dim raport5 As Pelny_raport = gusApi.Daj_pelnu_raport_dzialalnosci("32222222222222")
+        Dim raport1 As Pelny_raport_dzialalnosci = gusApi.Daj_pelnu_raport_dzialalnosci("39002176400000")
+        Dim raport2 As Pelny_raport_dzialalnosci = gusApi.Daj_pelnu_raport_dzialalnosci("")
+        Dim raport3 As Pelny_raport_dzialalnosci = gusApi.Daj_pelnu_raport_dzialalnosci("tekst")
+        Dim raport4 As Pelny_raport_dzialalnosci = gusApi.Daj_pelnu_raport_dzialalnosci(Nothing)
+        Dim raport5 As Pelny_raport_dzialalnosci = gusApi.Daj_pelnu_raport_dzialalnosci("32222222222222")
 
     End Sub  'ustaw punkt przerwania tutaj by sprawdzic ustawione dane i raporty
 
