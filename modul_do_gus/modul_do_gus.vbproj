@@ -49,6 +49,8 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Deployment" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -65,6 +67,11 @@
     <Import Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Connected Services\UslugaBIRpubl\Reference.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
     <Compile Include="Module1.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
@@ -91,6 +98,21 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
+    <None Include="Connected Services\UslugaBIRpubl\UslugaBIRzewnPubl.wsdl" />
+    <None Include="Connected Services\UslugaBIRpubl\UslugaBIRzewnPubl_wsdl0.wsdl" />
+    <None Include="Connected Services\UslugaBIRpubl\UslugaBIRzewnPubl_xsd0.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\UslugaBIRpubl\UslugaBIRzewnPubl_xsd1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\UslugaBIRpubl\UslugaBIRzewnPubl_xsd2.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\UslugaBIRpubl\UslugaBIRzewnPubl_xsd3.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="My Project\Application.myapp">
       <Generator>MyApplicationCodeGenerator</Generator>
       <LastGenOutput>Application.Designer.vb</LastGenOutput>
@@ -99,6 +121,24 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <CustomToolNamespace>My</CustomToolNamespace>
       <LastGenOutput>Settings.Designer.vb</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadataStorage Include="Connected Services\UslugaBIRpubl\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Connected Services\UslugaBIRpubl\configuration91.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Connected Services\UslugaBIRpubl\configuration.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Connected Services\UslugaBIRpubl\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.vb</LastGenOutput>
     </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
