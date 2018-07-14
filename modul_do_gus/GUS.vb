@@ -172,6 +172,9 @@ Module Module1
 
     Sub Main()
 
+
+        k = ""
+
         Dim gusApi As New GusApi
 
         Dim dane1 As Podstawowe_dane_dzialalnosci = gusApi.Daj_podstawowe_dane_dzialalnosci("6920000013")
@@ -187,6 +190,10 @@ Module Module1
         Dim raport3 As Pelny_raport_dzialalnosci = gusApi.Daj_pelen_raport_dzialalnosci("tekst")
         Dim raport4 As Pelny_raport_dzialalnosci = gusApi.Daj_pelen_raport_dzialalnosci(Nothing)
         Dim raport5 As Pelny_raport_dzialalnosci = gusApi.Daj_pelen_raport_dzialalnosci("32222222222222")
+
+
+
+
 
     End Sub  'ustaw punkt przerwania tutaj by sprawdzic ustawione dane i raporty
 
