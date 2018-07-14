@@ -1,5 +1,6 @@
 ﻿Imports System.ServiceModel
 Imports System.Xml
+Imports MSXML
 
 ' git in visual studio
 ' https://services.github.com/on-demand/windows/visual-studio
@@ -173,8 +174,6 @@ Module Module1
     Sub Main()
 
 
-        k = ""
-
         Dim gusApi As New GusApi
 
         Dim dane1 As Podstawowe_dane_dzialalnosci = gusApi.Daj_podstawowe_dane_dzialalnosci("6920000013")
@@ -192,7 +191,9 @@ Module Module1
         Dim raport5 As Pelny_raport_dzialalnosci = gusApi.Daj_pelen_raport_dzialalnosci("32222222222222")
 
 
-
+        Dim nbp As New NBPapi
+        Dim kurs As KursWaluty = nbp.Daj_aktualny_kurs_waluty("chf")
+        Dim kurs1 = nbp.Daj_aktualny_kurs_waluty("someWrongCode")
 
 
     End Sub  'ustaw punkt przerwania tutaj by sprawdzic ustawione dane i raporty
