@@ -30,8 +30,7 @@ Module Module1
         End Sub
     End Class
 
-
-
+    'spitfire
     Public Class Pelny_raport_dzialalnosci
         Public regon,
         nip,
