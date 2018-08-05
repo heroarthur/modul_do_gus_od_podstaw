@@ -207,8 +207,8 @@ Module Module1
         Dim kursy2 = nbp.Daj_kurs_w_okresie_czasu("chf", przedzial2)
         Dim kursy4 = nbp.Daj_kurs_w_okresie_czasu("chf", przedzial4)
         Dim kursy5 = nbp.Daj_kurs_w_okresie_czasu("chf", przedzial5)
-
-
+        Dim kursy6 = nbp.Daj_kurs_w_okresie_czasu(Nothing, przedzial1)
+        Dim kursy7 = nbp.Daj_kurs_w_okresie_czasu(Nothing, Nothing)
 
     End Sub  'ustaw punkt przerwania tutaj by sprawdzic ustawione dane i raporty
 
