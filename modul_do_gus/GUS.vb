@@ -191,12 +191,15 @@ Module Module1
 
 
 
-
-
         Dim nbp As New NBPapi
         Dim kurs As KursWaluty = nbp.Daj_aktualny_kurs_waluty("chf")
         Dim kurs1 = nbp.Daj_aktualny_kurs_waluty("someWrongCode")
 
+        Dim przedzial1 As New OkresCzasu(DateValue("Jun 19, 2010"), DateValue("Jun 28, 2010"))
+        Dim przedzial2 As New OkresCzasu(DateValue("Jun 19, 2010"), DateValue("Jun 28, 2011"))
+
+        Dim kursy1 = nbp.Daj_kurs_w_okresie_czasu("chf", przedzial1)
+        Dim kursy2 = nbp.Daj_kurs_w_okresie_czasu("chf", przedzial2)
 
     End Sub  'ustaw punkt przerwania tutaj by sprawdzic ustawione dane i raporty
 
