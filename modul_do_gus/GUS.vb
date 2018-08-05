@@ -165,9 +165,9 @@ Module Module1
                     End If
                 End If
                 Return dane
-            Catch ex As Exception
+            Catch ex As Exception 'shouldnt happen
                 dane.komunikat_diagnostyczny = Komunikaty_GusApi.throwned_exception
-                Return dane 'shouldnt happen
+                Return dane
             End Try
         End Function
 
