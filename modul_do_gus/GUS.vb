@@ -21,6 +21,7 @@ Module Module1
         brak_danej_dzialalnosci = 2
         nip_empty_lub_null = 3
         poprawny_format = 4
+        throwned_exception = 5
     End Enum
 
 
@@ -180,6 +181,7 @@ Module Module1
                 End If
                 Return dane
             Catch ex As Exception
+                dane.komunikat_diagnostyczny = Komunikaty_GusApi.throwned_exception
                 Return dane 'shouldnt happen
             End Try
         End Function
