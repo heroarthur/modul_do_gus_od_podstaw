@@ -1,6 +1,6 @@
 ﻿Imports System.ServiceModel
 Imports System.Xml
-Imports MSXML
+'Imports MSXML
 
 ' git in visual studio
 ' https://services.github.com/on-demand/windows/visual-studio
@@ -118,17 +118,17 @@ Module Module1
         End Function
 
 
-        Private Function poprawnosc_formatu_nip(Nip As String) As Komunikaty_GusApi
+        Private Function Poprawnosc_formatu_nip(Nip As String) As Komunikaty_GusApi
             If String.IsNullOrEmpty(Nip) Or IsNothing(Nip) Then
                 Return Komunikaty_GusApi.nip_empty_lub_null
-            ElseIf Not (Char.IsNumber(Nip) And Nip.Length = NIP_ilosc_cyfr) Then
+            ElseIf Not Char.IsNumber(Nip) Or Nip.Length <> NIP_ilosc_cyfr Then
                 Return Komunikaty_GusApi.niepoprawny_format_nip
             End If
             Return Komunikaty_GusApi.poprawny_format
         End Function
 
 
-        Private Function poprawnosc_wyszukania_dzialalnosci(ByRef xmlBasicData As String) As Komunikaty_GusApi
+        Private Function Poprawnosc_wyszukania_dzialalnosci(ByRef xmlBasicData As String) As Komunikaty_GusApi
             If String.IsNullOrEmpty(xmlBasicData) Or IsNothing(xmlBasicData) Then
                 Return Komunikaty_GusApi.brak_danej_dzialalnosci
             End If
@@ -156,10 +156,10 @@ Module Module1
         Public Function Daj_podstawowe_dane_dzialalnosci(Nip As String) As Podstawowe_dane_dzialalnosci
             Dim dane As Podstawowe_dane_dzialalnosci = New Podstawowe_dane_dzialalnosci
             Try
-                dane.komunikat_diagnostyczny = poprawnosc_formatu_nip(Nip)
+                dane.komunikat_diagnostyczny = Poprawnosc_formatu_nip(Nip)
                 If dane.komunikat_diagnostyczny = Komunikaty_GusApi.poprawny_format Then
                     Dim xmlBasicData As String = Pobierz_podstawowe_dane(Nip)
-                    dane.komunikat_diagnostyczny = poprawnosc_wyszukania_dzialalnosci(xmlBasicData)
+                    dane.komunikat_diagnostyczny = Poprawnosc_wyszukania_dzialalnosci(xmlBasicData)
                     If dane.komunikat_diagnostyczny = Komunikaty_GusApi.poprawnie_wyszukano_dzialalnosc Then
                         Wypelnij_podstawowe_dane(xmlBasicData, dane)
                     End If
