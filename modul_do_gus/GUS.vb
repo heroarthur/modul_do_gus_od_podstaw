@@ -179,7 +179,7 @@ Module Module1
 
     Sub Main()
 
-
+        'zapytania o dzialalnosci do Gus
         Dim gusApi As New GusApi
 
         Dim dane1 As Podstawowe_dane_dzialalnosci = gusApi.Daj_podstawowe_dane_dzialalnosci("6920000013")
@@ -190,16 +190,25 @@ Module Module1
         Dim dane5 As Podstawowe_dane_dzialalnosci = gusApi.Daj_podstawowe_dane_dzialalnosci("tekst")
 
 
-
+        'NBP zapytania o walute
         Dim nbp As New NBPapi
+
         Dim kurs As KursWaluty = nbp.Daj_aktualny_kurs_waluty("chf")
         Dim kurs1 = nbp.Daj_aktualny_kurs_waluty("someWrongCode")
 
         Dim przedzial1 As New OkresCzasu(DateValue("Jun 19, 2010"), DateValue("Jun 28, 2010"))
         Dim przedzial2 As New OkresCzasu(DateValue("Jun 19, 2010"), DateValue("Jun 28, 2011"))
+        'Dim przedzial3 As New OkresCzasu(DateValue("Jun 19, 2010"), DateValue("Jun 28, 2009")) asercja zla kolejnosc dat
+        Dim przedzial4 As New OkresCzasu(DateValue("Jun 19, 2010"), DateValue("Jun 19, 2010"))
+        Dim przedzial5 As New OkresCzasu(DateValue("Jun 19, 2010"), DateValue("Jun 20, 2010"))
+
 
         Dim kursy1 = nbp.Daj_kurs_w_okresie_czasu("chf", przedzial1)
         Dim kursy2 = nbp.Daj_kurs_w_okresie_czasu("chf", przedzial2)
+        Dim kursy4 = nbp.Daj_kurs_w_okresie_czasu("chf", przedzial4)
+        Dim kursy5 = nbp.Daj_kurs_w_okresie_czasu("chf", przedzial5)
+
+
 
     End Sub  'ustaw punkt przerwania tutaj by sprawdzic ustawione dane i raporty
 

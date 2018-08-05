@@ -19,7 +19,8 @@ Module NarodowyBankPolski
         kod_waluty_empty_lub_null = 3
         poprawny_format = 4
         throwned_exception = 5
-        przedzial_czasu_zbyt_duzy = 6
+        przekroczono_limit_92_dni = 6
+        brak_aktualizacji_w_tym_okresie = 7
     End Enum
 
 
@@ -49,6 +50,7 @@ Module NarodowyBankPolski
         End Sub
 
     End Class
+
 
     Public Class PrzedzialKursuWaluty
         Public kursyWaluty As ArrayList
@@ -153,14 +155,16 @@ Module NarodowyBankPolski
             Return Komunikaty_NBP.poprawny_format
         End Function
 
+
         Private Function Poprawnosc_zapytania_o_przedzial(kodWaluty As String, przedzial As OkresCzasu) As Komunikaty_NBP
             Dim roznicaWDniach As Integer = DateDiff("d", przedzial.dataPoczatkowa, przedzial.dataKoncowa)
             If roznicaWDniach > Limit_zapytania_w_dniach Then
-                Return Komunikaty_NBP.przedzial_czasu_zbyt_duzy
+                Return Komunikaty_NBP.przekroczono_limit_92_dni
             Else
                 Return Poprawnosc_formatu_kodu_waluty(kodWaluty)
             End If
         End Function
+
 
         Private Function Poprawnosc_wyszukania_xml(ByRef xmlDownloandedData As String) As Komunikaty_NBP
             If String.IsNullOrEmpty(xmlDownloandedData) Or IsNothing(xmlDownloandedData) Then
@@ -212,7 +216,7 @@ Module NarodowyBankPolski
 
                 Return kurs
             Catch ex As Exception
-                kurs.komunikat_diagnostyczny = Komunikaty_NBP.throwned_exception
+                kurs.komunikat_diagnostyczny = Komunikaty_NBP.brak_aktualizacji_w_tym_okresie
                 Return kurs
             End Try
         End Function
@@ -255,7 +259,7 @@ Module NarodowyBankPolski
                 End If
                 Return kursyWaluty
             Catch ex As Exception
-                kursyWaluty.komunikat_diagnostyczny = Komunikaty_NBP.throwned_exception
+                kursyWaluty.komunikat_diagnostyczny = Komunikaty_NBP.brak_aktualizacji_w_tym_okresie
                 Return kursyWaluty
             End Try
 
