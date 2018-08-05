@@ -118,17 +118,6 @@ Module Module1
         End Function
 
 
-        Private Function Pobierz_pelny_raport(Regon As String) As String
-            Uaktualnij_sesje_gus()
-            Using (New OperationContextScope(cc.InnerChannel))
-                requestMessage.Headers("sid") = strSID
-                OperationContext.Current.OutgoingMessageProperties(Channels.HttpRequestMessageProperty.Name) = requestMessage
-
-                Return cc.DanePobierzPelnyRaport(Regon, "PublDaneRaportPrawna")
-            End Using
-        End Function
-
-
         Private Function poprawnosc_formatu_nip(Nip As String) As Komunikaty_GusApi
             If String.IsNullOrEmpty(Nip) Or IsNothing(Nip) Then
                 Return Komunikaty_GusApi.nip_empty_lub_null
@@ -138,6 +127,7 @@ Module Module1
             Return Komunikaty_GusApi.poprawny_format
         End Function
 
+
         Private Function poprawnosc_wyszukania_dzialalnosci(ByRef xmlBasicData As String) As Komunikaty_GusApi
             If String.IsNullOrEmpty(xmlBasicData) Or IsNothing(xmlBasicData) Then
                 Return Komunikaty_GusApi.brak_danej_dzialalnosci
@@ -145,11 +135,6 @@ Module Module1
             Return Komunikaty_GusApi.poprawnie_wyszukano_dzialalnosc
         End Function
 
-        'if !format_nip_poprawny:
-        '     return
-        'pobierz_dane
-        'if sa puste ret wyszukanie puste
-        'wypelnij podstawowe dane
 
         Private Sub Wypelnij_podstawowe_dane(xmlBasicData As String, ByRef dane As Podstawowe_dane_dzialalnosci)
             Dim doc As New XmlDocument()
@@ -185,30 +170,6 @@ Module Module1
                 Return dane 'shouldnt happen
             End Try
         End Function
-
-
-        Public Function Daj_pelen_raport_dzialalnosci(Regon As String) As Pelny_raport_dzialalnosci
-            Dim raport As Pelny_raport_dzialalnosci = New Pelny_raport_dzialalnosci
-            Try
-                If String.IsNullOrEmpty(Regon) Or IsNothing(Regon) Then
-                    Throw New ArgumentNullException(NameOf(Regon))
-                End If
-                Dim xmlBasicData As String = Pobierz_pelny_raport(Regon)
-                Dim doc As New XmlDocument()
-                doc.LoadXml(xmlBasicData)
-
-                raport.regon = doc.GetElementsByTagName("praw_regon14")(0).InnerXml
-                raport.nip = doc.GetElementsByTagName("praw_nip")(0).InnerXml
-                raport.nazwa = doc.GetElementsByTagName("praw_nazwa")(0).InnerXml
-                raport.nazwaSkrocona = doc.GetElementsByTagName("praw_nazwaSkrocona")(0).InnerXml
-                raport.numerWRejestrzeEwidencji = doc.GetElementsByTagName("praw_numerWrejestrzeEwidencji")(0).InnerXml
-                Return raport
-            Catch ex As Exception
-                'MsgBox("Nie mozna pobrac raportu" & vbCrLf & ex.Message)
-                Return raport
-            End Try
-        End Function
-
 
     End Class
 
