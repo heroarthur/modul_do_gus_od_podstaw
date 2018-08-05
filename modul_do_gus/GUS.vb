@@ -12,6 +12,18 @@ Imports MSXML
 Module Module1
 
 
+    Const NIP_ilosc_cyfr = 10
+
+
+    Enum Komunikaty_GusApi
+        poprawnie_wyszukano_dzialalnosc = 0
+        niepoprawny_format_nip = 1
+        brak_danej_dzialalnosci = 2
+        nip_empty_lub_null = 3
+        poprawny_format = 4
+    End Enum
+
+
     Public Class Podstawowe_dane_dzialalnosci
         Public regon,
         nazwa,
@@ -24,13 +36,15 @@ Module Module1
         typ,
         silosId As String
 
+        Public komunikat_diagnostyczny As Komunikaty_GusApi
+
         Public Sub New()
             regon = "" : nazwa = "" : wojewodztwo = "" : powiat = "" : gmina = ""
             miejscowosc = "" : kodpocztowy = "" : ulica = "" : typ = "" : silosId = ""
         End Sub
     End Class
 
-    'spitfire
+
     Public Class Pelny_raport_dzialalnosci
         Public regon,
         nip,
@@ -114,29 +128,59 @@ Module Module1
         End Function
 
 
+        Private Function poprawnosc_formatu_nip(Nip As String) As Komunikaty_GusApi
+            If String.IsNullOrEmpty(Nip) Or IsNothing(Nip) Then
+                Return Komunikaty_GusApi.nip_empty_lub_null
+            ElseIf Not (Char.IsNumber(Nip) And Nip.Length = NIP_ilosc_cyfr) Then
+                Return Komunikaty_GusApi.niepoprawny_format_nip
+            End If
+            Return Komunikaty_GusApi.poprawny_format
+        End Function
+
+        Private Function poprawnosc_wyszukania_dzialalnosci(ByRef xmlBasicData As String) As Komunikaty_GusApi
+            If String.IsNullOrEmpty(xmlBasicData) Or IsNothing(xmlBasicData) Then
+                Return Komunikaty_GusApi.brak_danej_dzialalnosci
+            End If
+            Return Komunikaty_GusApi.poprawnie_wyszukano_dzialalnosc
+        End Function
+
+        'if !format_nip_poprawny:
+        '     return
+        'pobierz_dane
+        'if sa puste ret wyszukanie puste
+        'wypelnij podstawowe dane
+
+        Private Sub Wypelnij_podstawowe_dane(xmlBasicData As String, ByRef dane As Podstawowe_dane_dzialalnosci)
+            Dim doc As New XmlDocument()
+            doc.LoadXml(xmlBasicData)
+
+            dane.regon = doc.GetElementsByTagName("Regon")(0).InnerXml
+            dane.nazwa = doc.GetElementsByTagName("Nazwa")(0).InnerXml
+            dane.wojewodztwo = doc.GetElementsByTagName("Wojewodztwo")(0).InnerXml
+            dane.powiat = doc.GetElementsByTagName("Powiat")(0).InnerXml
+            dane.gmina = doc.GetElementsByTagName("Gmina")(0).InnerXml
+            dane.miejscowosc = doc.GetElementsByTagName("Miejscowosc")(0).InnerXml
+            dane.kodpocztowy = doc.GetElementsByTagName("KodPocztowy")(0).InnerXml
+            dane.ulica = doc.GetElementsByTagName("Ulica")(0).InnerXml
+            dane.typ = doc.GetElementsByTagName("Typ")(0).InnerXml
+            dane.silosId = doc.GetElementsByTagName("SilosID")(0).InnerXml
+        End Sub
+
+
         Public Function Daj_podstawowe_dane_dzialalnosci(Nip As String) As Podstawowe_dane_dzialalnosci
             Dim dane As Podstawowe_dane_dzialalnosci = New Podstawowe_dane_dzialalnosci
             Try
-                If String.IsNullOrEmpty(Nip) Or IsNothing(Nip) Then
-                    Throw New ArgumentNullException(NameOf(Nip))
+                dane.komunikat_diagnostyczny = poprawnosc_formatu_nip(Nip)
+                If dane.komunikat_diagnostyczny = Komunikaty_GusApi.poprawny_format Then
+                    Dim xmlBasicData As String = Pobierz_podstawowe_dane(Nip)
+                    dane.komunikat_diagnostyczny = poprawnosc_wyszukania_dzialalnosci(xmlBasicData)
+                    If dane.komunikat_diagnostyczny = Komunikaty_GusApi.poprawnie_wyszukano_dzialalnosc Then
+                        Wypelnij_podstawowe_dane(xmlBasicData, dane)
+                    End If
                 End If
-                Dim xmlBasicData As String = Pobierz_podstawowe_dane(Nip)
-                Dim doc As New XmlDocument()
-                doc.LoadXml(xmlBasicData)
-
-                dane.regon = doc.GetElementsByTagName("Regon")(0).InnerXml
-                dane.nazwa = doc.GetElementsByTagName("Nazwa")(0).InnerXml
-                dane.wojewodztwo = doc.GetElementsByTagName("Wojewodztwo")(0).InnerXml
-                dane.powiat = doc.GetElementsByTagName("Powiat")(0).InnerXml
-                dane.gmina = doc.GetElementsByTagName("Gmina")(0).InnerXml
-                dane.miejscowosc = doc.GetElementsByTagName("Miejscowosc")(0).InnerXml
-                dane.kodpocztowy = doc.GetElementsByTagName("KodPocztowy")(0).InnerXml
-                dane.ulica = doc.GetElementsByTagName("Ulica")(0).InnerXml
-                dane.typ = doc.GetElementsByTagName("Typ")(0).InnerXml
-                dane.silosId = doc.GetElementsByTagName("SilosID")(0).InnerXml
                 Return dane
             Catch ex As Exception
-                Return dane
+                Return dane 'shouldnt happen
             End Try
         End Function
 
@@ -183,11 +227,7 @@ Module Module1
         Dim dane5 As Podstawowe_dane_dzialalnosci = gusApi.Daj_podstawowe_dane_dzialalnosci("tekst")
 
 
-        Dim raport1 As Pelny_raport_dzialalnosci = gusApi.Daj_pelen_raport_dzialalnosci("39002176400000")
-        Dim raport2 As Pelny_raport_dzialalnosci = gusApi.Daj_pelen_raport_dzialalnosci("")
-        Dim raport3 As Pelny_raport_dzialalnosci = gusApi.Daj_pelen_raport_dzialalnosci("tekst")
-        Dim raport4 As Pelny_raport_dzialalnosci = gusApi.Daj_pelen_raport_dzialalnosci(Nothing)
-        Dim raport5 As Pelny_raport_dzialalnosci = gusApi.Daj_pelen_raport_dzialalnosci("32222222222222")
+
 
 
         Dim nbp As New NBPapi
