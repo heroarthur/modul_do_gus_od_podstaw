@@ -1,6 +1,5 @@
 ﻿Imports System.ServiceModel
 Imports System.Xml
-'Imports MSXML
 
 ' git in visual studio
 ' https://services.github.com/on-demand/windows/visual-studio
@@ -21,7 +20,8 @@ Module Module1
         brak_danej_dzialalnosci = 2
         nip_empty_lub_null = 3
         poprawny_format = 4
-        throwned_exception = 5
+        nieudane_logowanie_pusty_SID = 5
+        throwned_exception = 6
     End Enum
 
 
@@ -69,7 +69,6 @@ Module Module1
         Private cc As UslugaBIRpubl.UslugaBIRzewnPublClient
         Private requestMessage As Channels.HttpRequestMessageProperty
 
-        'srodowisko i klucz testowe
         Private Const gusUrl As String = "https://wyszukiwarkaregontest.stat.gov.pl/wsBIR/UslugaBIRzewnPubl.svc"
         Private Const gus_key As String = "abcde12345abcde12345"
         Private strSID As String
@@ -99,9 +98,7 @@ Module Module1
             Static seja_poprawna As String = "1"
             Static status_sesji As String = "StatusSesji"
             Dim stan_sesji = cc.GetValue(status_sesji)
-            If stan_sesji <> seja_poprawna Then
-                strSID = cc.Zaloguj(gus_key)
-            End If
+            strSID = cc.Zaloguj(gus_key)
         End Sub
 
 
@@ -129,7 +126,9 @@ Module Module1
 
 
         Private Function Poprawnosc_wyszukania_dzialalnosci(ByRef xmlBasicData As String) As Komunikaty_GusApi
-            If String.IsNullOrEmpty(xmlBasicData) Or IsNothing(xmlBasicData) Then
+            If String.IsNullOrEmpty(strSID) Or IsNothing(strSID) Then
+                Return Komunikaty_GusApi.nieudane_logowanie_pusty_SID
+            ElseIf String.IsNullOrEmpty(xmlBasicData) Or IsNothing(xmlBasicData) Then
                 Return Komunikaty_GusApi.brak_danej_dzialalnosci
             End If
             Return Komunikaty_GusApi.poprawnie_wyszukano_dzialalnosc
@@ -179,6 +178,11 @@ Module Module1
 
     Sub Main()
 
+        Dim nip1 As String = "9370003171"
+        Dim nip2 As String = "9542685559"
+        Dim nip3 As String = "9372509153"
+
+
         'zapytania o dzialalnosci do Gus
         Dim gusApi As New GusApi
 
@@ -188,6 +192,9 @@ Module Module1
         Dim unini As String
         Dim dane4 As Podstawowe_dane_dzialalnosci = gusApi.Daj_podstawowe_dane_dzialalnosci(unini)
         Dim dane5 As Podstawowe_dane_dzialalnosci = gusApi.Daj_podstawowe_dane_dzialalnosci("tekst")
+
+
+
 
 
         'NBP zapytania o walute
@@ -201,7 +208,6 @@ Module Module1
         'Dim przedzial3 As New OkresCzasu(DateValue("Jun 19, 2010"), DateValue("Jun 28, 2009")) asercja zla kolejnosc dat
         Dim przedzial4 As New OkresCzasu(DateValue("Jun 19, 2010"), DateValue("Jun 19, 2010"))
         Dim przedzial5 As New OkresCzasu(DateValue("Jun 19, 2010"), DateValue("Jun 20, 2010"))
-
 
         Dim kursy1 = nbp.Daj_kurs_w_okresie_czasu("chf", przedzial1)
         Dim kursy2 = nbp.Daj_kurs_w_okresie_czasu("chf", przedzial2)

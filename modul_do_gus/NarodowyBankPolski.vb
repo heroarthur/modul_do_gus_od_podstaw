@@ -8,8 +8,8 @@ Module NarodowyBankPolski
 
 
     Private Const NBPformatDaty As String = "yyyy-MM-dd"
-    Const Kod_waluty_dlugosc As Integer = 3
-    Const Limit_zapytania_w_dniach As Integer = 92
+    Private Const Kod_waluty_dlugosc As Integer = 3
+    Private Const Limit_zapytania_w_dniach As Integer = 92
 
 
     Enum Komunikaty_NBP
@@ -94,7 +94,6 @@ Module NarodowyBankPolski
     Public Class NBPapi
 
         Private Const NBP_api_rates_url As String = "http://api.nbp.pl/api/exchangerates/rates"
-        Private Const NBP_api_tables_url As String = "http://api.nbp.pl/api/exchangerates/tables/"
         Private Const TabelaKursówŚrednichWalutObcych_A As String = "a"
         Private Const TabelaKursówKupnaISprzedażyWalutObcych_C As String = "c"
         Private Const xmlFormat = "?format=xml"
@@ -261,6 +260,8 @@ Module NarodowyBankPolski
             Catch ex As Exception
                 kursyWaluty.komunikat_diagnostyczny = Komunikaty_NBP.brak_aktualizacji_w_tym_okresie
                 Return kursyWaluty
+            Finally
+
             End Try
 
         End Function
