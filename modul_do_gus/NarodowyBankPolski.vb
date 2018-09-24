@@ -62,16 +62,17 @@ Module NarodowyBankPolski
         End Sub
 
         Public Sub Uzupelnij_liste_kursow(nazwaWaluty As String, kodWaluty As String,
-                 datyAktualizacjiKursu As XmlNodeList, kursySrednie As XmlNodeList,
-                 kursyKupna As XmlNodeList, kursySprzedazy As XmlNodeList)
-            Dim iloscWpisow As Integer = datyAktualizacjiKursu.Count
+                 datyAktualizacjiKursu_T1 As XmlNodeList, datyAktualizacjiKursu_T2 As XmlNodeList,
+                 kursySrednie As XmlNodeList, kursyKupna As XmlNodeList, kursySprzedazy As XmlNodeList)
+            Dim iloscWpisow As Integer = datyAktualizacjiKursu_T1.Count
             For i = 0 To iloscWpisow - 1
+                Debug.Assert(datyAktualizacjiKursu_T1(i).InnerText = datyAktualizacjiKursu_T2(i).InnerText) 'NBP should set this dates equal
                 kursyWaluty.Add(New KursWaluty(nazwaWaluty,
                                                 kodWaluty,
                                                 kursyKupna(i).InnerText,
                                                 kursySprzedazy(i).InnerText,
                                                 kursySprzedazy(i).InnerText,
-                                                datyAktualizacjiKursu(i).InnerText))
+                                                datyAktualizacjiKursu_T1(i).InnerText))
             Next i
         End Sub
     End Class
@@ -229,13 +230,16 @@ Module NarodowyBankPolski
 
             Dim nazwaWaluty As String = tabela_A.GetElementsByTagName("Currency")(0).InnerText
             Dim kodWaluty As String = tabela_A.GetElementsByTagName("Code")(0).InnerText
-            Dim datyAktualizacjiKursu = tabela_A.GetElementsByTagName("EffectiveDate")
+            Dim datyAktualizacjiKursu_A = tabela_A.GetElementsByTagName("EffectiveDate")
+            Dim datyAktualizacjiKursu_C = tabela_C.GetElementsByTagName("EffectiveDate")
+
+
             Dim kursySrednie = tabela_A.GetElementsByTagName("Mid")
             Dim kursyKupna = tabela_C.GetElementsByTagName("Bid")
             Dim kursySprzedazy = tabela_C.GetElementsByTagName("Ask")
 
-            kursyWaluty.Uzupelnij_liste_kursow(nazwaWaluty, kodWaluty, datyAktualizacjiKursu,
-                                               kursySrednie, kursyKupna, kursySprzedazy)
+            kursyWaluty.Uzupelnij_liste_kursow(nazwaWaluty, kodWaluty, datyAktualizacjiKursu_A,
+                                         datyAktualizacjiKursu_C, kursySrednie, kursyKupna, kursySprzedazy)
         End Sub
 
 
