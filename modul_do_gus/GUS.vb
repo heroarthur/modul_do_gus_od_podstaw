@@ -95,9 +95,6 @@ Module Module1
         End Sub
 
         Private Sub Uaktualnij_sesje_gus()
-            Static seja_poprawna As String = "1"
-            Static status_sesji As String = "StatusSesji"
-            Dim stan_sesji = cc.GetValue(status_sesji)
             strSID = cc.Zaloguj(gus_key)
         End Sub
 
